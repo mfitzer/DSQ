@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(nameText, InputMethodManager.SHOW_IMPLICIT);
 
-        // http request information
-        //final String url = "localhost:3001/api/checkin";
-
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,9 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject json = new JSONObject();
 
+        fName = nameText.getText().toString();
+        lName = lnameText.getText().toString();
+
         try {
-            json.put("fname", "Prueba"); // POST First name
-            json.put("lname", "Serviplis"); // POST Last name
+            json.put("fname", fName); // POST First name
+            json.put("lname", lName); // POST Last name
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        // SEND IT??
+        // Send the JSON object if it has something.
         if(json.length() > 0){
             new sendJsonToServer().execute(String.valueOf(json));
         }
