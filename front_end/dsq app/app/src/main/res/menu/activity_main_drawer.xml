@@ -13,11 +13,11 @@
             android:icon="@drawable/ic_menu_view"
             android:title="View Saved DSQ's" />
 
-        <!--might need this later-->
-        <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/ic_menu_slideshow"-->
-            <!--android:title="Add something" />-->
+        might need this later
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_addappointment"
+            android:title=" Add Appointment" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"

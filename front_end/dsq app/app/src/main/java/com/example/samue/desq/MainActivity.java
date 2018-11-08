@@ -96,4 +96,11 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    //adding a event listener from search to search page for dsq
+
+//    public void clickEvent (View v){
+//
+//
+//    }
 }
