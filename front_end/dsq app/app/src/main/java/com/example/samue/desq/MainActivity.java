@@ -97,10 +97,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //adding a event listener from search to search page for dsq
+   //add an onclick to link the search with the search.xml
 
-//    public void clickEvent (View v){
-//
-//
-//    }
+
 }

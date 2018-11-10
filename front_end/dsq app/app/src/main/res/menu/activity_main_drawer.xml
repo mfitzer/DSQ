@@ -12,8 +12,6 @@
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_view"
             android:title="View Saved DSQ's" />
-
-        might need this later
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_addappointment"
