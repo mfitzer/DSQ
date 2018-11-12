@@ -1,5 +1,6 @@
 package com.example.samue.desq;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //instantiating a new button
+        Button signinbtn = (Button) findViewById(R.id.button2);
+        signinbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //linking the sign in button with the sign in page
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+
+        });
     }
 
     @Override
@@ -80,15 +94,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_search) {
+            // Handle the search action
+            Intent search = new Intent(this, searchActivity.class);
+            this.startActivity(search);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_viewsaved) {
 
-        } else if (id == R.id.nav_share) {
+            Intent view = new Intent(this, viewActivity.class);
+            this.startActivity(view);
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_appointment) {
+            Intent appointment  = new Intent(this, appointmentActivity.class);
+            this.startActivity(appointment);
+
+        } else if (id == R.id.nav_settings) {
+            Intent settings = new Intent(this, settingsActivity.class);
+            this.startActivity(settings);
 
         }
 
@@ -97,10 +119,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //adding a event listener from search to search page for dsq
 
-//    public void clickEvent (View v){
-//
-//
-//    }
+
+
+
+
 }
