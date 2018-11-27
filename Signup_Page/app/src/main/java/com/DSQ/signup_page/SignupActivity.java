@@ -7,27 +7,33 @@ import android.view.View;
 import android.widget.EditText;
 
 public class SignupActivity extends AppCompatActivity{
-    public static final String EXTRA_MESSAGE  = "com.DSQ.signup_page.MESSAGE";
 
-    private EditText phoneNumber;
-    private EditText firstName;
-    private EditText lastName;
+    private EditText phoneNumberEditText;
+    private EditText firstNameEditText;
+    private EditText lastNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        phoneNumber = (EditText) findViewById(R.id.phoneNumber);
-        firstName = (EditText) findViewById(R.id.firstName);
-        lastName = (EditText) findViewById(R.id.lastName);
+        phoneNumberEditText = (EditText) findViewById(R.id.phoneNumber);
+        firstNameEditText = (EditText) findViewById(R.id.firstName);
+        lastNameEditText = (EditText) findViewById(R.id.lastName);
     }
 
     public void signUp(View view)
     {
         Intent intent = new Intent(this, PhoneVerification.class);
-        String phone = phoneNumber.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, phone);
+
+        String phoneNumber = phoneNumberEditText.getText().toString();
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+
+        //intent.putExtra(EXTRA_MESSAGE, phone);
+        intent.putExtra("PhoneNumber", phoneNumber);
+        intent.putExtra("FirstName", firstName);
+        intent.putExtra("LastName", lastName);
         startActivity(intent);
     }
 
