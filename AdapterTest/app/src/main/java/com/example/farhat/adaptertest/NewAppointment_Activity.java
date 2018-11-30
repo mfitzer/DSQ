@@ -94,9 +94,6 @@ public class NewAppointment_Activity extends AppCompatActivity {
         Intent intent = new Intent(NewAppointment_Activity.this, MainActivity.class);
         intent.putExtra("apptBool", isApptCreated);
         startActivity(intent);
-
-        // reset boolean
-        // isApptCreated = false;
     }
 
     public void assignApptValues(){
