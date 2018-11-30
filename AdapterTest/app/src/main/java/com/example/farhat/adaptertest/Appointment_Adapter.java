@@ -44,16 +44,16 @@ public class Appointment_Adapter extends BaseAdapter {
             view = inflater.inflate(R.layout.appointment_box, viewGroup, false);
         }
 
-        TextView apptTitle = (TextView) view.findViewById(R.id.titleText);
+        TextView apptTitle =  view.findViewById(R.id.titleText);
         apptTitle.setText(apptList.get(position).appt_Title);
 
-        TextView timeFrame = (TextView) view.findViewById(R.id.timeFrameText);
+        TextView timeFrame = view.findViewById(R.id.timeFrameText);
         timeFrame.setText(apptList.get(position).appt_Time);
 
-        TextView DesqID = (TextView) view.findViewById(R.id.desqIDText);
+        TextView DesqID = view.findViewById(R.id.desqIDText);
         DesqID.setText(apptList.get(position).appt_desq);
 
-        TextView Location = (TextView) view.findViewById(R.id.locationText);
+        TextView Location = view.findViewById(R.id.locationText);
         Location.setText(apptList.get(position).appt_Location);
 
 

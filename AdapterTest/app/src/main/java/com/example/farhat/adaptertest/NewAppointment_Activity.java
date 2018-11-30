@@ -4,12 +4,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class NewAppointment_Activity extends AppCompatActivity {
+
+    EditText apptTitle, apptTime, apptDesq, apptLocation;
+    private static String title;
+    private static String time;
+    private static String desq;
+    private static String location;
+    Button addButton;
+    boolean isApptCreated = false;
+    ListView appointment_list;
+    Appointment_Adapter apptAdapter;
 
 
     @Override
@@ -17,17 +35,38 @@ public class NewAppointment_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_appointment);
 
-        EditText apptTitle = (EditText) findViewById(R.id.apptTitle);
-        EditText apptTime = (EditText) findViewById(R.id.apptTime);
-        EditText apptDesq = (EditText) findViewById(R.id.apptDesq);
-        EditText apptLocation = (EditText) findViewById(R.id.apptLocation);
+        apptTitle = findViewById(R.id.apptTitle);
+        apptTime = findViewById(R.id.apptTime);
+        apptDesq = findViewById(R.id.apptDesq);
+        apptLocation = findViewById(R.id.apptLocation);
+        addButton = findViewById(R.id.addApptBtn);
+
+        Appointment_Adapter apptAdapter;
+
+        // TODO: attempt2 -> assign strings to values and send them with intent()
+
+
+
 
         // To send info between activities I think (?)
         Intent intent = getIntent();
 
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //addNewAppt(apptTitle, apptTime, apptDesq, apptLocation);
+                assignApptValues();
+
+                Toast.makeText(getApplicationContext(), "Appointment Created", Toast.LENGTH_LONG).show();
+
+                // Change apptBoolean to true, create intent to pass it to main activity
+                sendBool();
+            }
+        });
+
     }
 
-    // hide keyboard
+    // hide keyboard function
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev){
         View view = getCurrentFocus();
@@ -47,7 +86,42 @@ public class NewAppointment_Activity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    public void addNewAppt(){
 
+    // Send boolean to activity function
+    public void sendBool(){
+
+        isApptCreated = true;
+        Intent intent = new Intent(NewAppointment_Activity.this, MainActivity.class);
+        intent.putExtra("apptBool", isApptCreated);
+        startActivity(intent);
+
+        // reset boolean
+        // isApptCreated = false;
+    }
+
+    public void assignApptValues(){
+        title = apptTitle.getText().toString();
+        time = apptTime.getText().toString();
+        desq = apptDesq.getText().toString();
+        location = apptLocation.getText().toString();
+    }
+
+
+
+    // TODO: attempt 2 -> getting the values to strings (for MainActivity)
+    public static String getApptTitle(){
+        return title;
+    }
+
+    public static String getApptTime(){
+        return time;
+    }
+
+    public static String  getApptDesq(){
+        return desq;
+    }
+
+    public static String getApptLoc(){
+        return location;
     }
 }
