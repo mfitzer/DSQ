@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Check if appt was created
-        // TODO: fix passing boolean value
         appt_created = getIntent().getBooleanExtra("apptBool", false);
 
         if(appt_created){
