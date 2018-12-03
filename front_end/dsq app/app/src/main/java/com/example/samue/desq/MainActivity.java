@@ -28,7 +28,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //instantianting
+        //Notification channel
+        MyFirebaseMessagingService myFMS = new MyFirebaseMessagingService();
+        myFMS.createNotificationChannel(this, "Channel ID", "Channel Name", "Channel Description", MyFirebaseMessagingService.NotificationChannelImportance.Urgent);
+
+        //instantiating
         databaseUsers = FirebaseDatabase.getInstance().getReference("User");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
