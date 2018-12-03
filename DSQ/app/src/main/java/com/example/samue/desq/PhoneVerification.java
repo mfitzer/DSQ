@@ -1,5 +1,4 @@
-package com.DSQ.signup_page;
-
+package com.example.samue.desq;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -105,6 +104,8 @@ public class PhoneVerification extends AppCompatActivity {
             {
                 createNewUser(phoneNumber, firstName, lastName);
             }
+
+            goToMainActivity();
         }
         else
         {
@@ -118,5 +119,11 @@ public class PhoneVerification extends AppCompatActivity {
 
         String toastMessage = "User account created: \n" + phone + " " + firstName + " " + lastName;
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
+    }
+
+    private void goToMainActivity()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
