@@ -2,6 +2,7 @@ package com.example.samue.desq;
 
 import android.app.NotificationChannel;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,14 +14,22 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import android.os.Build.VERSION;
 
+import java.io.IOException;
+import java.util.concurrent.Executor;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public enum NotificationChannelImportance { Low, Medium, High, Urgent }
+    private String notificationToken = "";
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
@@ -92,7 +101,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     @Override
     public void onNewToken(String token) {
+        notificationToken = token;
         //This needs to be stored in database for user
         Log.d("INSTANCE ID TOKEN","Refreshed token: " + token);
+    }
+
+    public void generateNotificationToken(final PhoneVerification phoneVerification)
+    {
+        if (notificationToken.equals(""))
+        {
+            Task<InstanceIdResult> instanceIdResultTask = FirebaseInstanceId.getInstance().getInstanceId();
+            instanceIdResultTask.addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if (task.isSuccessful()) {
+                        notificationToken = task.getResult().getToken();
+                        String ID = task.getResult().getId();
+
+                        Log.d("Marty's Token","Token is not set: new token -> " + notificationToken);
+                    }
+                    else {
+                        Log.d("Marty's Token","Token generation failed.");
+                    }
+
+                    phoneVerification.createNewUser(notificationToken);
+                }
+            });
+        }
+        else
+        {
+            Log.d("Marty's Token","Token is set: " + notificationToken);
+
+        }
+    }
+
+    public void onComplete(Task<InstanceIdResult> task)
+    {
+
     }
 }

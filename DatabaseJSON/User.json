@@ -1,11 +1,12 @@
 {
     "Users":
     {
-        "User":
+        "UserId":
         {
             "PhoneNumber":"",
             "FirstName":"",
-            "LastName":""
+            "LastName":"",
+            "NotificationToken":""
         }
     }
 }

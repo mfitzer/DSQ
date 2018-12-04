@@ -11,20 +11,30 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class PhoneVerification extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     private static String phoneVerificationMessage = "DSQ verification code: ";
+    private String currentUserId;
     private String phoneNumber;
     private String firstName;
     private String lastName;
     private String verificationCode;
     EditText verificationCodeEditText;
+    DatabaseReference databaseUsers;
+    MyFirebaseMessagingService myFMS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_verification);
+
+        //Notification channel
+        myFMS = new MyFirebaseMessagingService();
+        myFMS.createNotificationChannel(this, "Channel ID", "Channel Name", "Channel Description", MyFirebaseMessagingService.NotificationChannelImportance.Urgent);
 
 
         Intent intent = getIntent();
@@ -35,6 +45,8 @@ public class PhoneVerification extends AppCompatActivity {
         sendVerificationCode(phoneNumber);
 
         verificationCodeEditText = findViewById(R.id.verificationCode);
+
+        FirebaseDatabase.getInstance().getReference("Users");
     }
 
     private void sendVerificationCode(String phone)
@@ -102,7 +114,8 @@ public class PhoneVerification extends AppCompatActivity {
 
             if (!userExists)
             {
-                createNewUser(phoneNumber, firstName, lastName);
+                myFMS.generateNotificationToken(this);
+                //createNewUser(phoneNumber, firstName, lastName);
             }
 
             goToMainActivity();
@@ -113,13 +126,25 @@ public class PhoneVerification extends AppCompatActivity {
         }
     }
 
-    private void createNewUser(String phone, String firstName, String lastName)
+    public void createNewUser(String notificationToken)
     {
         //Store user data in db
+        databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
 
-        String toastMessage = "User account created: \n" + phone + " " + firstName + " " + lastName;
+        currentUserId = databaseUsers.push().getKey();    //used to generate unique id
+        String fullName = firstName + ' ' + lastName;
+        //String notificationToken = myFMS.getNotificationToken();
+
+        UserData user = new UserData(currentUserId, fullName, phoneNumber, notificationToken);  //adding new user to the database
+
+        databaseUsers.child(currentUserId).setValue(user);
+        CurrentUserData.User.userData = user;
+
+        String toastMessage = "User account created";
         Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
     }
+
+    public String getCurrentUserId() { return currentUserId; }
 
     private void goToMainActivity()
     {

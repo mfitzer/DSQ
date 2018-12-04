@@ -36,14 +36,16 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
 
     //database reference object
     DatabaseReference databaseUsers;
+    DatabaseReference databaseAppointments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment);
 
-        //setting the reference of users that are alread existing
+        //setting the reference of users that are already existing
         databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
+        databaseAppointments = FirebaseDatabase.getInstance().getReference("Appointments");
 
         //getting the XML views
         descriptionView = (EditText) findViewById(R.id.description);
@@ -58,6 +60,7 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
         cancel = (Button) findViewById(R.id.button_cancel);
         send = (Button) findViewById(R.id.button_send);
         send.setOnClickListener(this);
+        cancel.setOnClickListener(this);
 
         //oncoming data changes
         Intent incoming = getIntent();
@@ -71,19 +74,30 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
 
         if (view == send){
-            databaseUsers = FirebaseDatabase.getInstance().getReference("Users");
+            databaseAppointments = FirebaseDatabase.getInstance().getReference("Appointments");
             String title = titleView.getText().toString().trim();  //title
-            String name = descriptionView.getText().toString().trim();  //username
+            String description = descriptionView.getText().toString().trim();  //description
             String date = dateView.getText().toString().trim();  //date
+            String startTime = txtTime.getText().toString().trim(); // start time
+            String currentUserId = CurrentUserData.User.getId();
 
-            if (!TextUtils.isEmpty(name) && (!TextUtils.isEmpty(date))) {
+            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(date) && !TextUtils.isEmpty(startTime)) {
 
-                String id = databaseUsers.push().getKey();    //used to generate unique id
+                String appointmentId = databaseAppointments.push().getKey();    //used to generate unique id
+                AppointmentData appointment = new AppointmentData(appointmentId, title, description, date, startTime, currentUserId);  //adding new user to the database
+
+                databaseAppointments.child(appointmentId).setValue(appointment);
+
+                Toast.makeText(this, "Appointment added to the database", Toast.LENGTH_LONG).show();
+
+                goToMainActivity();
+
+                /*String id = databaseUsers.push().getKey();    //used to generate unique id
                 userInfo user = new userInfo(name, date, id, title);  //adding new user to the database
 
                 databaseUsers.child(id).setValue(user);
 
-                Toast.makeText(this, "User added to the database", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "User added to the database", Toast.LENGTH_LONG).show();*/
             } else {
                 Toast.makeText(this, "Please Make sure all fields are filled correctly", Toast.LENGTH_LONG).show();
             }
@@ -134,10 +148,18 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
         }
 
         if (view == cancel){
-            Intent cancel  = new Intent(this, MainActivity.class);
-            this.startActivity(cancel);
+            /*Intent cancel  = new Intent(this, MainActivity.class);
+            this.startActivity(cancel);*/
+
+            goToMainActivity();
             Toast.makeText(this, " CANCELLED ", Toast.LENGTH_LONG).show();
 
         }
+    }
+
+    private void goToMainActivity()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
