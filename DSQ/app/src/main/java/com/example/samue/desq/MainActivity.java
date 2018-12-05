@@ -21,6 +21,15 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    // TODO: the location of this class depends on where we hold the appointment list
+    // However, it should be here.
+    public class Appointment{
+        public String appt_Title;
+        public String appt_Time;
+        public String appt_desq;
+        public String appt_Location;
+    }
+
 
     DatabaseReference databaseUsers;
     @Override

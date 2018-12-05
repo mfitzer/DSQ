@@ -22,4 +22,5 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
+    <!-- I think we need to add a list view here for the appointment list -->
 </android.support.v4.widget.DrawerLayout>
