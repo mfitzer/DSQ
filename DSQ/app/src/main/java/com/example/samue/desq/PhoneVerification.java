@@ -42,7 +42,15 @@ public class PhoneVerification extends AppCompatActivity {
         firstName = intent.getStringExtra("FirstName");
         lastName = intent.getStringExtra("LastName");
 
-        sendVerificationCode(phoneNumber);
+        //Check if phone has sms capability
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
+        {
+            sendVerificationCode(phoneNumber); //Send code, device has sms capability
+        }
+        else
+        {
+            generateVerificationCode(); //The code is static right now
+        }
 
         verificationCodeEditText = findViewById(R.id.verificationCode);
 
