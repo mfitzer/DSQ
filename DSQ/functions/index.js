@@ -5,60 +5,72 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.testNotification = functions.database.instance('dynamic-scheduling-system').ref('/Users/{UserId}/title').onWrite((snapshot, context) => {
 
-    const userId = context.params.UserId;
+exports.appointmentChangeNotification = functions.database.instance('dynamic-scheduling-system').ref('/Appointments/{AppointmentId}/{changedAttribute}').onUpdate((change, context) => {
 
-    // Get the list of device notification token.
-    const getDeviceTokensPromise = admin.database().ref(`/Users/${userId}/NotificationToken`).once('value');
+    const originalValue = change.before.val();
+    const newValue = change.after.val();
+    //const attributeName = change.data.key();
+    //const attributeName = ;
+    const appointmentId = context.params.AppointmentId;
 
-    // The snapshot to the user's tokens.
-    let tokensSnapshot;
+    console.log(originalValue + ' changed to ' + newValue);
 
-    // The array containing all the user's tokens.
-    let tokens;
+    //Get appointment object
+    admin.database().ref(`/Appointments/${appointmentId}`).on("value", function(snapshot) {
+        const appointmentObj = snapshot.val();
 
-    return Promise.all([getDeviceTokensPromise]).then(results => {
-        tokensSnapshot = results[0];
-        const notificationToken = tokensSnapshot.val();
+        const appointmentTitle = appointmentObj.title;
+        const visitorId = appointmentObj.visitorId;
 
-        // Check if there are any device tokens.
-        /*if (!tokensSnapshot.hasChildren()) {
-            return console.log('There are no notification tokens to send to.');
-        }
-        console.log('There are', tokensSnapshot.numChildren(), 'tokens to send notifications to.');*/
+        // Get the user's device notification token
+        const getDeviceTokensPromise = admin.database().ref(`/Users/${visitorId}/notificationToken`).once('value');
 
-        // Notification details.
-        const payload = {
-            notification: {
-            title: 'Database triggered notification!',
-            body: "Something was changed!"
-            }
-        };
+        // The snapshot to the user's tokens.
+        let tokensSnapshot;
 
-        // Listing all tokens as an array.
-        console.log("registrationToken: " + notificationToken);
-        //tokens = Object.keys(tokenSnapshot.val());
-        // Send notifications to all tokens.
-        return admin.messaging().sendToDevice(notificationToken, payload);
-    }).then((response) => {
-        // For each message check if there was an error.
-        const tokensToRemove = [];
-        response.results.forEach((result, index) => {
-            const error = result.error;
-            if (error) {
-                console.error('Failure sending notification to', tokens[index], error);
-                // Cleanup the tokens who are not registered anymore.
-                if (error.code === 'messaging/invalid-registration-token' || error.code === 'messaging/registration-token-not-registered')
-                {
-                    tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
+        // The array containing all the user's tokens.
+        let tokens;
+
+        return Promise.all([getDeviceTokensPromise]).then(results => {
+            tokensSnapshot = results[0];
+            const notificationToken = tokensSnapshot.val();
+            console.log("notificationToken: " + notificationToken);
+
+            // Notification details.
+            const payload = {
+                notification: {
+                    title: appointmentTitle,
+                    body: 'Appointment details modified: ' + newValue
+                },
+                data: {
+                    userId: visitorId
                 }
-            }
-            else
-            {
-                console.log("No errors! Notification sent!");
-            }
+            };
+
+            // Send notifications to all tokens.
+            return admin.messaging().sendToDevice(notificationToken, payload);
+        }).then((response) => {
+            // For each message check if there was an error.
+            const tokensToRemove = [];
+            response.results.forEach((result, index) => {
+                const error = result.error;
+                if (error) {
+                    console.error('Failure sending notification to', tokens[index], error);
+                    // Cleanup the tokens who are not registered anymore.
+                    if (error.code === 'messaging/invalid-registration-token' || error.code === 'messaging/registration-token-not-registered')
+                    {
+                        tokensToRemove.push(tokensSnapshot.ref.child(tokens[index]).remove());
+                    }
+                }
+                else
+                {
+                    console.log("No errors! Notification sent!");
+                }
+            });
+        return Promise.all(tokensToRemove);
         });
-    return Promise.all(tokensToRemove);
-    });
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
 });

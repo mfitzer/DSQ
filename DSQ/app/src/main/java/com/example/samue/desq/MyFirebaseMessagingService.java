@@ -33,6 +33,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
+        //String userId = message.getData().get("userId").toString();
+        //CurrentUserData.User.setId(userId);
         sendMyNotification(message.getNotification().getTitle(), message.getNotification().getBody(), "Channel ID");
     }
 
@@ -133,10 +135,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d("Marty's Token","Token is set: " + notificationToken);
 
         }
-    }
-
-    public void onComplete(Task<InstanceIdResult> task)
-    {
-
     }
 }
