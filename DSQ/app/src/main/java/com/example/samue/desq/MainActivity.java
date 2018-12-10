@@ -60,16 +60,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //instantiating a new button
-        Button signinbtn = (Button) findViewById(R.id.button2);
-        signinbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //linking the sign in button with the sign in page
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
-
-        });
     }
 
     @Override
