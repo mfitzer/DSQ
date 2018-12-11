@@ -3,54 +3,6 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
-        <entry key="imageWizard">
-          <value>
-            <PersistentState>
-              <option name="children">
-                <map>
-                  <entry key="imageAssetPanel">
-                    <value>
-                      <PersistentState>
-                        <option name="children">
-                          <map>
-                            <entry key="launcher">
-                              <value>
-                                <PersistentState>
-                                  <option name="children">
-                                    <map>
-                                      <entry key="foregroundImage">
-                                        <value>
-                                          <PersistentState>
-                                            <option name="values">
-                                              <map>
-                                                <entry key="scalingPercent" value="46" />
-                                              </map>
-                                            </option>
-                                          </PersistentState>
-                                        </value>
-                                      </entry>
-                                    </map>
-                                  </option>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="C:\Users\samue\Desktop\GitHub\DSQ\LogoDesign\PlusIcon.png" />
-                                      <entry key="outputName" value="plus_icon" />
-                                    </map>
-                                  </option>
-                                </PersistentState>
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
-                      </PersistentState>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </PersistentState>
-          </value>
-        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -66,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_circle_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/D:/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_cancel_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -76,10 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="1dabbe" />
-                            <entry key="opacityPercent" value="68" />
-                            <entry key="outputName" value="ic_add_circle_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\samuel kerosi" />
+                            <entry key="color" value="f11217" />
+                            <entry key="outputName" value="ic_cancel_black_24dp" />
+                            <entry key="sourceFile" value="C:\Users\Farhat" />
                           </map>
                         </option>
                       </PersistentState>

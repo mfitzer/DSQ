@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,8 +31,8 @@ import java.util.List;
 public class appointmentActivity  extends AppCompatActivity implements View.OnClickListener {
 
     EditText editTextname, descriptionView, titleView;
-    Button send, cancel;
-    Button btnDatePicker, btnTimePicker;
+    ImageButton send, cancel;
+    ImageButton btnDatePicker, btnTimePicker;
     EditText txtDate, txtTime;
     private int mYear, mMonth, mDay, mHour, mMinute;
     TextView dateView;
@@ -57,14 +58,14 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
         descriptionView = (EditText) findViewById(R.id.description);
         titleView = (EditText) findViewById(R.id.titleView);  //title
         dateView = (TextView) findViewById(R.id.dateView);
-        btnDatePicker = (Button) findViewById(R.id.btn_date);
-        btnTimePicker = (Button) findViewById(R.id.btn_time);
+        btnDatePicker = findViewById(R.id.btn_date);
+        btnTimePicker = findViewById(R.id.btn_time);
         txtDate = (EditText) findViewById(R.id.dateView);
         txtTime = (EditText) findViewById(R.id.timeView);
         btnDatePicker.setOnClickListener(this);
         btnTimePicker.setOnClickListener(this);
-        cancel = (Button) findViewById(R.id.button_cancel);
-        send = (Button) findViewById(R.id.button_send);
+        cancel = findViewById(R.id.button_cancel);
+        send = findViewById(R.id.button_send);
         send.setOnClickListener(this);
         cancel.setOnClickListener(this);
 

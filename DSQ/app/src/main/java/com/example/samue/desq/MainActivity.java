@@ -181,16 +181,8 @@ public class MainActivity extends AppCompatActivity
 
                     if(visitorID.equals(currentUserID)){
                         apptList.add(apptData);
-                        Toast.makeText(context, "Appointment added to appt list", Toast.LENGTH_LONG).show();
                     }
                 }
-
-                Toast.makeText(context, "List size: " + apptList.size(), Toast.LENGTH_LONG).show();
-
-                // Assign values to appointment object
-
-
-
             }
 
             @Override
