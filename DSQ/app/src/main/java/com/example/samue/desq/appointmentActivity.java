@@ -182,7 +182,7 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
             this.startActivity(cancel);*/
 
             goToMainActivity();
-            Toast.makeText(this, " CANCELLED ", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, " CANCELLED ", Toast.LENGTH_LONG).show();
 
         }
     }
