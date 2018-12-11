@@ -16,6 +16,9 @@ public class AppointmentData {
         this.startTime = startTime;
         this.visitorId = visitorId;
     }
+    public AppointmentData (){
+
+    }
 
     public String getId() { return id; }
 

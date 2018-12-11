@@ -18,8 +18,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.List;
@@ -75,38 +78,62 @@ public class appointmentActivity  extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-
         if (view == send){
             databaseAppointments = FirebaseDatabase.getInstance().getReference("Appointments");
-            String title = titleView.getText().toString().trim();  //title
-            String description = descriptionView.getText().toString().trim();  //description
-            String date = dateView.getText().toString().trim();  //date
-            String startTime = txtTime.getText().toString().trim(); // start time
-            String currentUserId = CurrentUserData.User.getId();
+            //dbCheck = databaseUsers.child("date");   //ref for checking if the date already exists in the database
 
-            if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(date) && !TextUtils.isEmpty(startTime)) {
+            databaseAppointments.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                String appointmentId = databaseAppointments.push().getKey();    //used to generate unique id
-                AppointmentData appointment = new AppointmentData(appointmentId, title, description, date, startTime, currentUserId);  //adding new user to the database
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                databaseAppointments.child(appointmentId).setValue(appointment);
+                    //String dbDate = dbCheck.toString();
+                    String startTime = txtTime.getText().toString().trim(); //start time
+                    String title = titleView.getText().toString().trim();  //title
+                    String description = descriptionView.getText().toString().trim();
+                    String date = dateView.getText().toString().trim();  //date
+                    String currentUserId = CurrentUserData.User.getId();
 
-                Toast.makeText(this, "Appointment added to the database", Toast.LENGTH_LONG).show();
+                    Boolean apptValid = true;
 
-                goToMainActivity();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        AppointmentData apptData = snapshot.getValue(AppointmentData.class);
+                        String dbApptDate = apptData.date;
+                        String dbApptTime = apptData.startTime;
 
-                /*String id = databaseUsers.push().getKey();    //used to generate unique id
-                userInfo user = new userInfo(name, date, id, title);  //adding new user to the database
+                        if (dbApptDate.equals(date) && dbApptTime.equals(startTime)) {
+                            apptValid = false;
+                            Toast.makeText(appointmentActivity.this, "Appointment time not valid, please select another time.", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                    }
 
-                databaseUsers.child(id).setValue(user);
+                    if (apptValid)
+                    {
+                        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(date) && !TextUtils.isEmpty(startTime)) {
+                            String appointmentId = databaseAppointments.push().getKey();    //used to generate unique id
+                            AppointmentData appointment = new AppointmentData(appointmentId, title, description, date, startTime, currentUserId);  //adding new user to the database
 
-                Toast.makeText(this, "User added to the database", Toast.LENGTH_LONG).show();*/
-            } else {
-                Toast.makeText(this, "Please Make sure all fields are filled correctly", Toast.LENGTH_LONG).show();
-            }
+                            databaseAppointments.child(appointmentId).setValue(appointment);
+
+                            Toast.makeText(appointmentActivity.this, "Appointment added to the database", Toast.LENGTH_LONG).show();
+
+                            goToMainActivity();
+
+                        } else {
+                            Toast.makeText(appointmentActivity.this, "Please Make sure all fields are filled correctly", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(appointmentActivity.this, "There has been an error in the database", Toast.LENGTH_SHORT).show();
+                }
+
+            });
 
         }
-
         if (view == btnDatePicker) {
 
             // Get Current Date
