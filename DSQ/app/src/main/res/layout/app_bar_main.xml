@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -29,7 +29,7 @@
         android:layout_gravity="bottom|end"
         android:scaleType="center"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_circle_black_24dp"/>
+        android:src="@drawable/ic_menu_addappointment"/>
 
     <!-- app:srcCompat="@android:drawable/ic_menu_add" -->
 

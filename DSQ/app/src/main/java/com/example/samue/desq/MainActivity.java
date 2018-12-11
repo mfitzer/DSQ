@@ -1,5 +1,6 @@
 package com.example.samue.desq;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,22 +15,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    // TODO: the location of this class depends on where we hold the appointment list
-    // However, it should be here.
-    public class Appointment{
-        public String appt_Title;
-        public String appt_Time;
-        public String appt_desq;
-        public String appt_Location;
-    }
 
+    Appointment_Adapter adapter;
+    Context context;
+    ListView listView;
+
+    public class apptBox{
+        public String boxTitle;
+        public String boxTime;
+        public String boxDesq;
+        public String boxLoc;
+    }
 
     DatabaseReference databaseUsers;
     @Override
@@ -41,13 +52,17 @@ public class MainActivity extends AppCompatActivity
         databaseUsers = FirebaseDatabase.getInstance().getReference("User");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context = this;
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                  //      .setAction("Action", null).show();
+                Intent intent = new Intent(context, appointmentActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -60,6 +75,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        //TODO: please work
+        getApptList();
     }
 
     @Override
@@ -126,8 +144,60 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    // function to populate listview
+    public void getApptList(){
+
+
+        // get appointments associated with the current user's ID
+        DatabaseReference userAppointments = FirebaseDatabase.getInstance().getReference("Appointments");
+        userAppointments.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // while (appointment != null) { add to adapter and display; } ??
+                // get current user id
+                String currentUserID = CurrentUserData.User.getId();
+                //String test = dataSnapshot.getKey();
+                //String title, time, desq, location;
+                String desq = "Omar";
+                String location = "ECC 238";
+
+                ArrayList<AppointmentData> apptList = new ArrayList<>();
+
+                // add to adapter
+                adapter = new Appointment_Adapter(context, apptList);
+                listView = findViewById(R.id.apptListView);
+                listView.setAdapter(adapter);
+
+
+                // Loop through appointments
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    AppointmentData apptData = snapshot.getValue(AppointmentData.class);
+                    String date = apptData.date;
+                    String startTime = apptData.startTime;
+                    String title = apptData.title;
+
+                    //user id stuff
+                    String visitorID = apptData.visitorId;
+
+                    if(visitorID.equals(currentUserID)){
+                        apptList.add(apptData);
+                        Toast.makeText(context, "Appointment added to appt list", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                Toast.makeText(context, "List size: " + apptList.size(), Toast.LENGTH_LONG).show();
+
+                // Assign values to appointment object
 
 
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
